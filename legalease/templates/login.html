@@ -5,36 +5,47 @@
 <br>
 <div class="container col-md-4 rounded align-items-center" style="background-color: #FFFFFF; font-family: Roobert,serif;">
   <div class="container rounded" style="background-color: #FFCCCC;">
-        <div class="col-lg align-items-center">
-          <p> Manager Login </p>
-        </div>
+    <div class="col-lg align-items-center">
+      <p>User Login</p>
+    </div>
   </div>
   {% if status == 0 %}
-    <div class="alert alert-danger" role="alert">
-        <strong>Something</strong> 
-        went wrong
-    </div>
-    {% endif %}
+  <div class="alert alert-danger" role="alert">
+    <strong>Something</strong>
+    went wrong
+  </div>
+  {% endif %}
   {% if status == -1 %}
-    <div class="alert alert-danger" role="alert">
-        <strong>Wrong</strong> 
-        Credentials
-    </div>
-    {% endif %}
-<form action='/' method='POST'>
+  <div class="alert alert-danger" role="alert">
+    <strong>Wrong</strong>
+    Credentials
+  </div>
+  {% endif %}
+  <form action='/' method='POST'>
     {% csrf_token %}
     <div class="form-group">
-      <label for="formGroupExampleInput2">Email</label>
-      <input type="email" name="email" class="form-control" id="formGroupExampleInput2" placeholder="Enter Email" style="background-color: #FFFFFF;" required>
+      <label for="userEmail">Email</label>
+      <input type="email" name="email" class="form-control" id="userEmail" placeholder="Enter Email" style="background-color: #FFFFFF;" required>
     </div>
 
     <div class="form-group mt-2">
-        <label for="formGroupExampleInput2">Password</label>
-        <input type="password" name="password" class="form-control" id="formGroupExampleInput2" placeholder="Enter Password" style="background-color: #FFFFFF;" required>
+      <label for="userPassword">Password</label>
+      <input type="password" name="password" class="form-control" id="userPassword" placeholder="Enter Password" style="background-color: #FFFFFF;" required>
     </div>
     <button type="submit" class="btn-outline mt-2 text-white" style="background-color: #000000;">Submit</button> &nbsp;
   </form>
   <a type="button" class="btn btn-link mt-2 text-white" style="background-color: #303030;" href="/register">Not Registered</a>
+</div><br>
+
+<!-- Expert Login Section -->
+<div class="container col-md-4 rounded align-items-center mt-4" style="background-color: #FFFFFF; font-family: Roobert,serif;">
+  <div class="container rounded" style="background-color: #FFCCCC;">
+    <div class="col-lg align-items-center">
+      <p>Expert Login</p>
+      <a type="button" class="btn btn-link mt-2 text-white" style="background-color: #303030;" href="/expertlogin">Login</a>
+    </div>
+  </div>
+  <!-- Add conditions and forms for expert login, similar to the user login section -->
 </div>
 
 <footer class="small rounded mt-5" style="background-color: #FFE6EE; font-family: Roobert,serif;">

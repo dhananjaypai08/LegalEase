@@ -1,0 +1,200 @@
+.user-login-container {
+  width: 100%;
+  display: flex;
+  overflow: auto;
+  min-height: 100vh;
+  align-items: center;
+  flex-direction: column;
+}
+.user-login-user-login {
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+}
+.user-login-frame2 {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+}
+.user-login-mac-book-air1 {
+  width: 1280px;
+  height: 832px;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  align-items: flex-start;
+  flex-shrink: 0;
+  background-image: linear-gradient(-76deg, rgba(4, 14, 52, 1) 8%, rgba(128, 163, 174, 0.12450426816940308) 78%, rgba(145, 185, 198, 0) 100%);
+}
+.user-login-photo {
+  top: 0px;
+  left: 0px;
+  width: 1280px;
+  height: 832px;
+  position: absolute;
+}
+.user-login-rectangle1 {
+  top: 139px;
+  left: 409px;
+  width: 461px;
+  height: 554px;
+  position: absolute;
+}
+.user-login-rectangle2 {
+  top: 153px;
+  left: 422px;
+  width: 461px;
+  height: 554px;
+  position: absolute;
+}
+.user-login-text {
+  top: 203px;
+  left: 540px;
+  color: rgba(0, 0, 0, 1);
+  width: 225px;
+  height: auto;
+  position: absolute;
+  font-size: 80px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Forum;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.user-login-text02 {
+  top: 280px;
+  left: 528px;
+  color: rgba(0, 0, 0, 1);
+  width: 250px;
+  height: auto;
+  position: absolute;
+  font-size: 20px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Forum;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.user-login-text04 {
+  top: 600px;
+  left: 487px;
+  color: rgba(0, 0, 0, 1);
+  width: 331px;
+  height: auto;
+  position: absolute;
+  font-size: 20px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Forum;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.user-login-rectangle3 {
+  top: 355px;
+  left: 494px;
+  width: 317px;
+  height: 61px;
+  opacity: 0.80;
+  position: absolute;
+  border-radius: 32px;
+}
+.user-login-rectangle4 {
+  top: 444px;
+  left: 494px;
+  width: 317px;
+  height: 61px;
+  opacity: 0.80;
+  position: absolute;
+  border-radius: 32px;
+}
+.user-login-group1 {
+  top: 544px;
+  left: 471px;
+  width: 363px;
+  height: 47px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 1;
+  background-color: rgba(11, 7, 46, 1);
+}
+.user-login-text06 {
+  top: 2.4102630615234375px;
+  left: 55.846153259277344px;
+  color: rgba(152, 176, 237, 1);
+  width: 251px;
+  height: auto;
+  position: absolute;
+  font-size: 30px;
+  font-style: Display Regular;
+  text-align: center;
+  font-family: Noto Serif;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.user-login-group2 {
+  top: 642px;
+  left: 488px;
+  width: 330px;
+  height: 51px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 1;
+  background-color: rgba(11, 7, 46, 1);
+}
+.user-login-rectangle7 {
+  top: 3.642857074737549px;
+  left: 3.3559322357177734px;
+  width: 323px;
+  height: 44px;
+  position: absolute;
+}
+.user-login-text08 {
+  top: 663px;
+  left: 528px;
+  color: rgba(0, 0, 0, 1);
+  width: 249px;
+  height: auto;
+  position: absolute;
+  font-size: 20px;
+  font-style: Display Regular;
+  text-align: center;
+  font-family: Noto Serif;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.user-login-banner {
+  top: 158.39340209960938px;
+  left: 261.03125px;
+  width: 781.182861328125px;
+  height: 116.83348083496094px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 1;
+}
+.user-login-header {
+  gap: 38px;
+  top: 0px;
+  left: 0px;
+  width: 781.182861328125px;
+  height: 116.83348083496094px;
+  display: flex;
+  position: absolute;
+  align-items: center;
+  flex-shrink: 0;
+  flex-direction: column;
+}
