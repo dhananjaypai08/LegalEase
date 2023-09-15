@@ -13,6 +13,7 @@ class Expert(models.Model):
     name = models.CharField(max_length=200)
     email = models.EmailField()
     domain = models.CharField(max_length=200)
+    photo = models.ImageField(upload_to="expert")
     password = models.TextField()
     
 class Docs(models.Model):

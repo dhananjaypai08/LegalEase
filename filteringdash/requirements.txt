@@ -1,9 +1,0 @@
-langchain
-openai
-chainlit
-chromadb
-tiktoken
-PyPDF2
-pypdf
-pandas
-tabulate

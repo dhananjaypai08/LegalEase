@@ -5,7 +5,7 @@ import pandas as pd
 import plotly.express as px 
 from plotly.offline import plot
 from pandasai import PandasAI
-from api.models import User, Expert
+from api.models import User, Expert, Docs
 from api.serializers import UserSerializer
 from hashlib import sha256
 from django.core.mail import send_mail
@@ -104,131 +104,79 @@ def logout(request):
 def home(request):
     if not request.session.get('user_id'): return redirect(index)
     msg = {"title": "Dashboard", "description": "This is the landing Page"}
-    data = []
-    # with open('static/HR.csv', mode='r') as file:
-    #     csvfile = csv.reader(file)
-    #     for ind, lines in enumerate(csvfile):
-    #         if ind != 0:
-    #             inddata = {
-    #                 "Name": lines[1],
-    #                 "Hired": lines[2],
-    #                 "Previous CTC": lines[3],
-    #                 "Gender": lines[8],
-    #                 "Domain": lines[9],
-    #                 "Experience": lines[5]
-    #             }
-    #             data.append(inddata)
-
-    #print(data)
-    df = pd.read_csv('static/HR.csv')
-    # Calculate Total Employees
-    total_emp = df[df.columns[0]].count()
-    msg["total_emp"] = total_emp
-    
-    
-    #Calculate Gender Ratio
-    gender_counts = df['Gender'].value_counts()
-    count_male = gender_counts['Male']
-    count_female = gender_counts['Female']
-   
-    # Total Attrition
-    attrition = df['Attrition'].value_counts()['Yes']
-    msg["attrition"] = attrition
-    attrition_counts = df.groupby(['Gender', 'Attrition']).size().reset_index(name='Count')
-    male_attrition = attrition_counts.loc[3, "Count"]
-    female_attrition = attrition_counts.loc[1, "Count"]
-    # Attrition Ratio
-    attrition_ratio = format(((male_attrition+female_attrition)/total_emp)*100, ".3f")
-    msg["attrition_ratio"] = attrition_ratio
-    
-    # Department wise male and Female count
-    counts = df.groupby(['Department', 'Gender'])['Gender'].count()
-    hr_male, hr_female = counts["HR"]["Male"], counts["HR"]["Female"]
-    rd_male, rd_female = counts["R&D"]["Male"], counts["R&D"]["Female"]
-    sales_male, sales_female = counts["Sales"]["Male"], counts["Sales"]["Female"]
-    
-    
-    
-    
-    # Summary stats
-    msg["summary_stats"] = df.describe()
-    
-    # Gender ratio pie chart
-    fig_gender_ratio = px.pie(
-        df, values=[count_male, count_female], names=["Male", "Female"], height=500, title="Gender Ratio"
-    )
-    pie_plot = fig_gender_ratio.to_html(full_html=False, include_plotlyjs=False)
-    msg["fig_gender_ratio"] = pie_plot
-    
+    number_of_docs = len(Docs.objects.all())
+    msg["number_of_docs"] = number_of_docs
+    msg["number_of_domains"] = 5
+    msg["number_of_languages_supported"] = 25
     # HR ratio pie chart
-    fig_hr_ratio = px.pie(
-        df, values=[hr_male, hr_female], names=["HR Males", "HR Females"], height=250, title="HR"
-    )
-    pie_plot = fig_hr_ratio.to_html(full_html=False, include_plotlyjs=False)
-    msg["fig_hr_ratio"] = pie_plot
+    # fig_hr_ratio = px.pie(
+    #     df, values=[hr_male, hr_female], names=["HR Males", "HR Females"], height=250, title="HR"
+    # )
+    # pie_plot = fig_hr_ratio.to_html(full_html=False, include_plotlyjs=False)
+    # msg["fig_hr_ratio"] = pie_plot
     
-    # R&D pie chart
-    fig_rd_ratio = px.pie(
-        df, values=[rd_male, rd_female], names=["R&D Males", "R&D Females"], height=250, title="R&D"
-    )
-    pie_plot = fig_rd_ratio.to_html(full_html=False, include_plotlyjs=False)
-    msg["fig_rd_ratio"] = pie_plot
+    # # R&D pie chart
+    # fig_rd_ratio = px.pie(
+    #     df, values=[rd_male, rd_female], names=["R&D Males", "R&D Females"], height=250, title="R&D"
+    # )
+    # pie_plot = fig_rd_ratio.to_html(full_html=False, include_plotlyjs=False)
+    # msg["fig_rd_ratio"] = pie_plot
     
     # Sales pie chart
-    fig_sales_ratio = px.pie(
-        df, values=[sales_male, sales_female], names=["Sales Males", "Sales Females"], height=250, title="Sales"
-    )
-    pie_plot = fig_sales_ratio.to_html(full_html=False, include_plotlyjs=False)
-    msg["fig_sales_ratio"] = pie_plot
+    # fig_sales_ratio = px.pie(
+    #     df, values=[sales_male, sales_female], names=["Sales Males", "Sales Females"], height=250, title="Sales"
+    # )
+    # pie_plot = fig_sales_ratio.to_html(full_html=False, include_plotlyjs=False)
+    # msg["fig_sales_ratio"] = pie_plot
     
     # Total attrition by gender
-    fig_total_attritionbygender = px.bar(
-        attrition_counts, x="Gender", y="Count", color="Attrition", barmode='group', title="Total Attrition by Gender", height=500
-    )
-    bar_plot = fig_total_attritionbygender.to_html(full_html=False, include_plotlyjs=False)
-    msg["fig_total_attritionbygender"] = bar_plot
+    # fig_total_attritionbygender = px.bar(
+    #     attrition_counts, x="Gender", y="Count", color="Attrition", barmode='group', title="Total Attrition by Gender", height=500
+    # )
+    # bar_plot = fig_total_attritionbygender.to_html(full_html=False, include_plotlyjs=False)
+    # msg["fig_total_attritionbygender"] = bar_plot
 
-    #Box Plot
-    fig_pay_gap = px.box(df, x='Gender', y='Monthly Income', title='Salary Distribution by Gender', height=500)
-    box_plot = fig_pay_gap.to_html(full_html=False, include_plotlyjs=False)
-    msg["fig_pay_gap"] = box_plot
-    
-    return render(request, 'historical.html', msg)
+   
+    return render(request, 'home.html', msg)
 
 
-def prompt(request):
+def generatedoc(request):
     if not request.session.get('user_id'): return redirect(index)
     msg = {}
-    prompt = None
-    msg["prompt"] = prompt
-    imported_data = None
+    msg["status"] = -1
     if request.method == 'POST':
-        button = False
-        prompt = request.POST.get('prompt')
-        
-        csv_file = request.FILES.get('data')
-        
-        if csv_file:
-            imported_data = pd.read_csv(csv_file)
-            imported_data.to_csv('media/data.csv')
-            #print(imported_data.describe())
-            button = True
-        
-        if prompt:
-            imported_data = pd.read_csv('media/data.csv')
-            from pandasai.llm.openai import OpenAI
-            from dotenv import load_dotenv
-            load_dotenv()
-            api_key = os.getenv('api_key')
-            llm = OpenAI(api_token=api_key)
-            pandas_ai = PandasAI(llm)
-            response = pandas_ai.run(imported_data, prompt=prompt)
-            print(response, type(response))
-            msg["prompt"] = response
-        msg['button'] = button
-        msg["imported_data"] = imported_data.loc[0:9]
-    return render(request, 'prompt.html', msg)
-    
+        domain = request.POST.get('domain')
+        duration = request.POST.get('duration')
+        jurisdiction = request.POST.get('jurisdiction')
+        date = request.POST.get('date')
+        party1 = request.POST.get('party1')
+        party2 = request.POST.get('party2')
+        import openai
+        import os
+        openai.api_key = os.getenv('api_key')
+        # try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+            {"role": "user", "content": f"""Parties:
+            - Party A: {party1}
+            - Party B: {party2}
+            Terms:
+            - Effective Date: {date}
+            - Duration: {duration}
+            - Jurisdiction: {jurisdiction}
+
+            {domain}:
+            This {domain} ("{domain}") is entered into by Party A and Party B on the Effective Date. Generate a legal documentation for the above prompt."""}
+            ]
+        )
+        text = response['choices'][0]['message']['content']
+        msg["status"] = 1
+        msg["text"] = text
+        # except:
+        #     msg["status"] = 0
+
+    return render(request, 'generatedoc.html', msg)
 
 def custom(request):
     msg = {}

@@ -1,0 +1,100 @@
+{% extends 'partials/base.html' %}
+{% block content %}
+{% load static %}
+<br>
+<br>
+<div class="container col-md-4 rounded align-items-center" style="background-color: #FFFFFF; font-family: Roobert,serif;">
+  <div class="container rounded" style="background-color: #FFCCCC;">
+    <div class="col-lg align-items-center">
+      <p>Generate Doc</p>
+    </div>
+  </div>
+  {% if status == 0 %}
+  <div class="alert alert-danger" role="alert">
+    <strong>Something</strong>
+    went wrong
+  </div>
+  {% endif %}
+  
+  <form action='/generatedoc/' method='POST'>
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="userEmail">Domain</label>
+      <input type="text" name="domain" class="form-control" id="userEmail" placeholder="Enter Domain" style="background-color: #FFFFFF;" required>
+    </div>
+
+    <div class="form-group mt-2">
+      <label for="userPassword">Duration</label>
+      <input type="text" name="duration" class="form-control" id="userPassword" placeholder="Enter Duration" style="background-color: #FFFFFF;" required>
+    </div>
+    <div class="form-group mt-2">
+        <label for="userPassword">Jurisdiction</label>
+        <input type="text" name="jurisdiction" class="form-control" id="userPassword" placeholder="Enter Jurisdiction" style="background-color: #FFFFFF;" required>
+      </div>
+    
+      <div class="form-group mt-2">
+        <label for="userPassword">Date</label>
+        <input type="text" name="date" class="form-control" id="userPassword" placeholder="Enter Date" style="background-color: #FFFFFF;" required>
+      </div>
+
+      <div class="form-group mt-2">
+        <label for="userPassword">Party 1 Involved</label>
+        <input type="text" name="party1" class="form-control" id="userPassword" placeholder="Enter Name of Party1" style="background-color: #FFFFFF;" required>
+      </div>
+
+      <div class="form-group mt-2">
+        <label for="userPassword">Party 2 Involved</label>
+        <input type="text" name="party2" class="form-control" id="userPassword" placeholder="Enter Name of Party2" style="background-color: #FFFFFF;" required>
+      </div>
+    <button type="submit" class="btn-outline mt-2 text-white" style="background-color: #000000;">Generate Doc</button> &nbsp;
+  </form>
+</div><br>
+
+<div class="container">
+    {% if status == 1 %}
+  <div class="alert alert-danger" role="alert">
+    {{text}}
+  </div>
+  {% endif %}
+</div>
+
+
+
+<footer class="small rounded mt-5" style="background-color: #FFE6EE; font-family: Roobert,serif;">
+  <div class="container py-3 py-sm-5">
+    <div class="row">
+      
+      <div class="col-12 col-sm-6 col-md-3">
+        <h6>Information</h6>
+        <ul class="list-unstyled">
+          <li><a href="#">About us</a></li>
+          <li><a href="#">Membership</a></li>
+          <li><a href="https://www.linkedin.com/in/dhananjay-pai/">Contact</a></li>
+        </ul>
+      </div>
+      <div class="col-12 col-sm-6 col-md-3">
+        <address>
+          <strong>Mumbai</strong><br />
+          Chembur<br />
+          Collectors Colony, Maharashtra<br />
+          <abbr title="Telephone">Contact :</abbr
+          ><a href="tel:+917738959108">+91 7738959108</a><br />
+          <abbr title="Mail">Mail :</abbr
+          ><a href="mailto:dhananjay2002pai@gmail.com">dhananjay2002pai@gmail.com</a>
+        </address>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-sm-6 col-md-9">
+        <ul class="list-inline">
+          <li class="list-inline-item">&copy; 2023 Web Company, Inc.</li>
+          <li class="list-inline-item">All rights reserved.</li>
+          <li class="list-inline-item">
+            <a href="#">Terms of use and privacy policy</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+{% endblock %}
