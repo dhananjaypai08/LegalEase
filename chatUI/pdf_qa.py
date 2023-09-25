@@ -22,7 +22,7 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
-OPENAI_API_KEY= os.getenv("api_key")
+OPENAI_API_KEY= os.getenv("OPENAI_API_KEY")
 
 
 # text_splitter and system template

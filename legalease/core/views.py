@@ -19,6 +19,12 @@ from sklearn.linear_model import LogisticRegression
 from functools import lru_cache
 
 def index(request):
+    if request.session.get('user_id'): return redirect(home)
+    msg = {}
+    msg["title"] = "Welcome"
+    return render(request, 'index.html', msg)
+
+def login(request):
     if request.session.get('user_id'):
         return redirect(home)
     msg = {}
@@ -60,7 +66,7 @@ def email_verify(request):
     msg = {}
     msg['username'] = user_data['username'].value
     msg['status'] = 1
-    msg['title'] = 'Login'
+    msg['title'] = 'Verify Email'
     if request.method == 'POST':
         otp = str(request.POST.get('otp'))
         hash = str(sha256(otp.encode()).hexdigest())
@@ -173,53 +179,30 @@ def generatedoc(request):
         text = response['choices'][0]['message']['content']
         msg["status"] = 1
         msg["text"] = text
-        # except:
-        #     msg["status"] = 0
+        from reportlab.lib.pagesizes import letter
+        from reportlab.pdfgen import canvas
+        my_pdf = canvas.Canvas('C:/Users/dhana/coding/Personal Projects/LegalEase/legalease/media/docs/newfile.pdf', pagesize=letter)
+        my_pdf.setFont('Helvetica', 12)
+        x,y = 100, 700
+        paragraphs = text.split('\n\n')
+        for paragraph in paragraphs:
+            my_pdf.drawString(x,y, paragraph)
+            y -= 20
+        my_pdf.save()
+        #pdf.output('C:/Users/dhana/coding/Personal Projects/LegalEase/legalease/media/docs/newfile.pdf', 'F')
+        #my_pdf = Canvas("C:/Users/dhana/coding/Personal Projects/LegalEase/legalease/media/docs/newfile.pdf", pagesize = LETTER)  
+        
 
     return render(request, 'generatedoc.html', msg)
 
-def custom(request):
+def translation(request):
     msg = {}
-    import_form = True
-    changed = False
     if request.method == 'POST':
-        csv_file = request.FILES.get('data')
-        #num_rows = request.POST.get('num_rows')
-        #imported_data = None
-        #button = False
-        #edit = False
-        if csv_file:
-            imported_data = pd.read_csv(csv_file)
-            imported_data.drop(columns=imported_data.columns[0], axis=1, inplace=True)
-            imported_data.to_csv('static/HR.csv')
-            button = True
-            return redirect(home)
-        # elif num_rows:
-        #     num_rows = int(num_rows)
-        #     df = pd.read_csv('static/HR.csv')
-        #     columns = list(df.columns)
-        #     columns.pop(0)
-        #     num_columns = len(columns)
-        #     # data = [request.POST.getlist(f'data[{i}]') for i in range(num_rows)]
-        #     data = []
-        #     for i in range(num_rows):
-        #         lst = request.POST.getlist(f'data[{i}]')
-        #         lst.pop(0)
-        #         data.append(lst)
-        #     imported_data = pd.DataFrame(data, columns=columns)
-        #     imported_data.to_csv('media/custom.csv')
-        #     changed=True
-        #     button=True
-        # else:
-        #     imported_data = pd.read_csv('media/custom.csv')
-        #     edit = True
-        #     import_form = False
-        # msg['imported_data'] = imported_data   
-        # msg['button'] = button
-        # msg['edit'] = edit
-        # msg['changed'] = changed
-    msg['import_form'] = import_form      
-    return render(request, 'custom.html', msg)
+        pdf_file = request.FILES.get('data')
+        language_code = request.POST.get('language')
+        translate(pdf_file, language_code)
+        msg["status"] = 1    
+    return render(request, 'translate.html', msg)
 
 def expertlogin(request):
     msg = {"title": "Expert Login", "description": "This is the Expert Page"}
@@ -237,3 +220,55 @@ def expertlogin(request):
 
 def experthome(request):
     pass
+
+def translate(file, target_language):
+    from PyPDF2 import PdfReader
+    from googletrans import Translator
+    from reportlab.lib.pagesizes import letter
+    from reportlab.platypus import SimpleDocTemplate, Paragraph
+    from reportlab.lib.styles import getSampleStyleSheet
+    from io import BytesIO
+
+    def translate_text(text, target_language):
+        translator = Translator()
+        return translator.translate(text, dest=target_language).text
+
+    pdf_file = file
+    pdf_reader = PdfReader(open(pdf_file, "rb"))
+
+
+    output_filename = "legalease/media/docs/translated.pdf"
+
+    # Initialize ReportLab document
+    output_buffer = BytesIO()
+    doc = SimpleDocTemplate(output_buffer, pagesize=letter)
+
+    # Define a style for the translated text
+    styles = getSampleStyleSheet()
+    style = styles["Normal"]
+
+    translated_paragraphs = []
+
+    # Loop through each page of the PDF
+    for page_num in range(len(pdf_reader.pages)):
+        page = pdf_reader.pages[page_num]
+        text = page.extract_text()
+
+        # Translate the entire page's text to the target language
+        translated_text = translate_text(text, target_language)
+        
+        # Split the translated text into paragraphs
+        translated_paragraphs.extend(translated_text.split('\n'))
+
+    # Create Story for ReportLab
+    story = []
+
+    for paragraph in translated_paragraphs:
+        paragraph = Paragraph(paragraph, style)
+        story.append(paragraph)
+
+    # Build the ReportLab PDF
+    doc.build(story)
+
+    with open(output_filename, 'wb') as output_file:
+        output_file.write(output_buffer.getvalue())
